@@ -1,0 +1,35 @@
+/* Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+import Vue, { Component } from 'vue'
+import * as api from 'vue-hot-reload-api'
+
+export async function makeHot (id: string, componentLoader: () => Promise<Component>, acceptFunc: void) {
+  if (module.hot) {
+    api.install(Vue)
+    if (!api.compatible) {
+      throw new Error('vue-hot-reload-api is not compatible with the version of Vue you are using.')
+    }
+
+    const loadedComponent = await componentLoader()
+    api.createRecord(id, loadedComponent)
+  }
+}
+
+export function reload (id: string, component: Component) {
+  api.reload(id, component)
+}

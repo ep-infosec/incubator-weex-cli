@@ -1,0 +1,22 @@
+environment:
+  nodejs_version: "10"
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - yarn --network-timeout 600000
+
+test_script:
+  - git --version
+  - node --version
+  - yarn --version
+  # support windows env setting
+  - set WEEX_CLI_TEST=true && yarn test
+
+cache:
+  - node_modules -> yarn.lock
+
+build: off
+
+branches:
+  except:
+    - docs

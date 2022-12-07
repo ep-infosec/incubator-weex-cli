@@ -1,0 +1,46 @@
+// The MIT License (MIT)
+
+//   Copyright (c) 2016-3016 Infinite Red, Inc.
+
+//   Permission is hereby granted, free of charge, to any person obtaining a copy
+//   of this software and associated documentation files (the "Software"), to deal
+//   in the Software without restriction, including without limitation the rights
+//   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//   copies of the Software, and to permit persons to whom the Software is
+//   furnished to do so, subject to the following conditions:
+
+//   The above copyright notice and this permission notice shall be included in all
+//   copies or substantial portions of the Software.
+
+//   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//   SOFTWARE.
+
+import { generateHelp, commandInfo, getVersion, getModulesInfo } from '../toolbox/meta-tools'
+import { IToolbox } from '../core/toolbox'
+import { MetaOptions } from '../toolbox/meta-types'
+export interface IMeta {
+  version: () => string
+  commandInfo: () => string[][]
+  getModulesInfo: () => any[]
+  generateHelp: (param: MetaOptions, brand?: string) => any[]
+}
+
+/**
+ * Extension that lets you learn more about the currently running CLI.
+ *
+ * @param toolbox The running toolbox.
+ */
+export default function attach(toolbox: IToolbox): void {
+  const meta: IMeta = {
+    version: () => getVersion(toolbox),
+    commandInfo: () => commandInfo(toolbox),
+    getModulesInfo: () => getModulesInfo(toolbox),
+    generateHelp,
+  }
+  toolbox.meta = meta
+}
